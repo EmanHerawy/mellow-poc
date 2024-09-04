@@ -1,66 +1,33 @@
-## Foundry
+## Mellow LRT POC 
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This is a proof of concept for vulnerability in Mellow LRT.
 
-Foundry consists of:
+## Vulnerability
+- Potential Division-by-Zero Vulnerability in `_processLpAmount(...)` Function
+- Deposit and Withdrawal Operations Reverting Due to Asset Debt in vault.sol
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Set up
+- add MAINNET_RPC value in  .env file  
+- install the dependencies in melow-lrt
 
-## Documentation
 
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
+If needed : to add mellow to submodules
 ```shell
-$ forge build
+ git submodule add https://github.com/mellow-finance/mellow-lrt.git lib/mellow-lrt
+
+ git checkout  1c885ad9a2964ca88ad3e59c3a7411fc0059aa3
+ git submodule update --init --recursive
+
+
 ```
 
-### Test
+## How to Reproduce
+POC is added in the `test` folder and can be run using the following command:
 
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+ ```bash 
+ forge test --fork-url mainnet --fork-block-number 19845261 
+ ``` 
+- Potential Division-by-Zero Vulnerability in `_processLpAmount(...)` Function
+    - `forge test --fork-url mainnet --fork-block-number 19845261 --match-path ./test/ZeroDivisionttack.t.sol`
+- Deposit and Withdrawal Operations Reverting Due to Asset Debt in vault.sol
+    - `forge test --fork-url mainnet --fork-block-number 19845261 --match-path ./test/DOSTest.t.sol `
